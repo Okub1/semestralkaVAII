@@ -20,7 +20,6 @@ class CreateGamesTable extends Migration
             $table->decimal('price');
             $table->string('name');
             $table->text('description');
-            $table->timestamp('published_at');
             $table->timestamps();
             $table->softDeletes();
         });
