@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/games', 'GamesController@index')->name('games');
+//Route::get('/games/update', 'GamesController@CreateOrUpdate')->name('games');
+Route::get('/developers', 'DevelopersController@index')->name('developers');
+Route::get('/genres', 'GenresController@index')->name('genres');
