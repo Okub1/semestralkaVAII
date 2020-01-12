@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
 use App\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -9,6 +10,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class GenresController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index() {
         $genres = Genre::all();
 
@@ -57,6 +63,10 @@ class GenresController extends Controller
     public function delete($id = null) {
         $this->validation($id);
 
+        if (Game::where('genre_id', $id)->count() > 0) {
+            return abort(Response::HTTP_BAD_REQUEST, 'Cannot delete with existing games');
+        }
+
         Genre::where('id', $id)->delete();
         return Redirect::route('genres');
     }
@@ -81,5 +91,23 @@ class GenresController extends Controller
         if (!$genre) {
             return abort(Response::HTTP_NOT_FOUND, 'Genre not found.');
         }
+    }
+
+    public function apiGetGenre(Request $request, $id = null) {
+
+        $this->validation($id);
+
+        $genre = Genre::find($id);
+
+        return response()->json($genre);
+    }
+
+    public function apiGetGames(Request $request, $id = null) {
+
+        $this->validation($id);
+
+        $games = Game::where('genre_id', $id)->get()->all();
+
+        return response()->json($games);
     }
 }

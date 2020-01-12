@@ -49550,6 +49550,56 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app'
 });
+$(".game-info").on("click", function (e) {
+  e.preventDefault();
+  $.ajax('/api/games/' + e.target.id).done(function (data) {
+    $("#infoModal .modal-title").text(data.name);
+    $("#infoModal .modal-body").text(data.description);
+  });
+});
+$(".genre-info").on("click", function (e) {
+  e.preventDefault();
+  $.ajax('/api/genres/' + e.target.id).done(function (data) {
+    $("#infoModal .modal-title").text(data.name);
+    $("#infoModal .modal-body").text(data.description);
+  }).then(function () {
+    $.ajax('/api/genres/games/' + e.target.id).done(function (data) {
+      var content = "<h5 class='mt-4'>Hry ktore pouzivaju tento zaner</h5><table class='table table-striped'>"; //content += '<th>Meno</th>';
+
+      data.forEach(function (item) {
+        content += '<tr><td>' + item.name + '</td></tr>';
+      });
+      content += "</table>";
+      $("#infoModal .modal-body").append(content);
+    });
+  });
+});
+$(".clear-modal").on("click", function (e) {
+  $("#infoModal .modal-title").text("");
+  $("#infoModal .modal-body").text("Loading...");
+});
+$(".create-developer").on("click", function (e) {
+  var name = $("#name").val();
+  var description = $("#description").val();
+  var address = $("#address").val();
+
+  var _token = $('[name="_token"]').val();
+
+  $.ajax('/api/developers/create', {
+    method: 'POST',
+    data: {
+      name: name,
+      description: description,
+      address: address,
+      _token: _token
+    }
+  }).done(function (data) {
+    $('#developer_id').append("<option value=\"".concat(data.id, "\"> \n                                      ").concat(data.name, " </option>"));
+    $('#developer_id').val(data.id);
+  }).then(function () {
+    $('#developerModal').modal('hide');
+  });
+});
 
 /***/ }),
 
@@ -49685,8 +49735,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Pavol\devel\semestralkaVAII\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Pavol\devel\semestralkaVAII\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\thejo\Desktop\gamesDB\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\thejo\Desktop\gamesDB\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

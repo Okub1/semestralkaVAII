@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Redirect;
 class DevelopersController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index() {
         $developers = Developer::all();
 
@@ -88,5 +93,20 @@ class DevelopersController extends Controller
         if (!$developer) {
             return abort(Response::HTTP_NOT_FOUND, 'Developer not found.');
         }
+    }
+
+    public function apiCreateDeveloper(Request $request) {
+        $validatedData = $request->validate([
+            'name' => ['required', 'unique:developers', 'max:255'],
+            'description' => ['required'],
+            'address' => ['required'],
+        ]);
+
+
+        $developer = new Developer($validatedData);
+
+        $developer->save();
+
+        return response()->json($developer);
     }
 }

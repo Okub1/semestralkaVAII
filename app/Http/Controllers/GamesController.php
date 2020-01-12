@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Redirect;
 class GamesController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index() {
         $games = Game::with('genre')->get()->all();
@@ -27,7 +31,6 @@ class GamesController extends Controller
             if (!$game) {
                 abort(Response::HTTP_NOT_FOUND, 'Game not found.');
             }
-
         }
 
         $genres = Genre::all();
@@ -104,4 +107,15 @@ class GamesController extends Controller
             return abort(Response::HTTP_NOT_FOUND, 'Game not found.');
         }
     }
+
+    public function apiGetGame(Request $request, $id = null) {
+
+        $this->validation($id);
+
+        $game = Game::find($id);
+
+        return response()->json($game);
+    }
+
+
 }

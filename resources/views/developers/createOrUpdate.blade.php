@@ -38,6 +38,7 @@
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Submit">
+                            <a href="/developers" class="btn btn-danger">Cancel</a>
                         </div>
                     </form>
                 @else
@@ -58,6 +59,7 @@
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Submit">
+                            <a href="/developers" class="btn btn-danger">Cancel</a>
                         </div>
                     </form>
                 @endif
